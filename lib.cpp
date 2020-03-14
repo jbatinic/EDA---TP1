@@ -14,13 +14,21 @@ int parseCmdLine(int argc, char *argv[], pCallback p, void *userData) {
         /* If encountered an key, next argument is a value. If value is NULL then returning error */
         if (param[0]=='-')
         {
-            argumentCounter++; // increment counter by 1 option
-            i++;
-            value = argv[i];
-            if (value == NULL) {
-                return -1;
+            if (param[1] != '\0')
+            {
+                argumentCounter++; // increment counter by 1 option
+                i++;
+                value = argv[i];
+                if (value == NULL)
+                {
+                    return -1;
+                }
+                ok = p(param, value, userData);
             }
-            ok = p(param, value, userData);
+            else
+            {
+                ok = 0;
+            }
         }
         else
         {
