@@ -1,7 +1,8 @@
-#include "lib.cpp"
+#include "lib.h"
+#include <stdio.h>
 
 int parseCallback(char* key, char* value, void* userData){
-
+    return 1;
 }
 
 typedef struct {

@@ -1,5 +1,4 @@
 #include "lib.h"
-#include <stdio.h>
 
 int parseCmdLine(int argc, char *argv[], pCallback p, void *userData) {
 
@@ -13,7 +12,7 @@ int parseCmdLine(int argc, char *argv[], pCallback p, void *userData) {
         param = argv[i];
 
         /* If encountered an key, next argument is a value. If value is NULL then returning error */
-        if (isKey(param[0]))
+        if (param[0]=='-')
         {
             argumentCounter++; // increment counter by 1 option
             i++;
@@ -37,13 +36,4 @@ int parseCmdLine(int argc, char *argv[], pCallback p, void *userData) {
 
     }
     return argumentCounter;
-}
-
-int isKey(char param) {
-    if (param == '-') {
-        return 1;
-    }
-    else {
-        return 0;
-    }
 }
