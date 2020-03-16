@@ -14,19 +14,24 @@ int parseCallback(char* key, char* value, void* userData) {
 
     int success = 1;
     arg_struct * argumentos = (arg_struct *) userData;
-    string my_key(key);
+    string my_key;
+    if (key != NULL) {
+        my_key = key;
+    }
+    else {
+        my_key = "";
+    }
     string my_value(value);
 
 
     if (key) {
 
-       if ( true /*!strcmp(key, "maxclients")*/) {
-            argumentos->clave = my_key;
-        }
-        else {
-            printf("Argument Error!\n");
-            success = 0;
-        }
+       if (!strcmp(key,"maxclients")) {  //maxclients es la unica key valida
+           argumentos->clave = my_key;
+       }
+       else {
+           success = 0;
+       }
     }
     
     if (value) {
@@ -35,10 +40,6 @@ int parseCallback(char* key, char* value, void* userData) {
     else {
         printf("Parameter Error!\n");
         success = 0;
-    }
-    
-    if (success) {
-        userData = (arg_struct*)userData + 1;
     }
 
     return success;
@@ -51,61 +52,57 @@ int main (void) {
 
     int result;
     int i;
-
+    
     //TEST 1:
 
-    char* test1[] = {"my_exe","-maxclients","2","hello"};
+    char* test1[] = {"my_exe","-maxclients","2", "hello", NULL};
     arg_struct test1_data[5];
 
-    if ((result = parseCmdLine(4, test1, parseCallback, &test1_data)) != -1) {
+    result = parseCmdLine(4, test1, parseCallback, test1_data);
+    if (result != -1) {
         cout << "Test 1 successful!!" << endl << "Total arguments: " << result << endl;
-        for (i = 0; i < 5; i++) {
-            cout << (test1_data[i]).clave << endl << (test1_data[i]).parametro << endl;
-        }
-        
     }
     else {
         cout << "Test 1 unsuccessful!" << endl;
     }
+
+    
 
     // TEST 2:
 
-    char* test2[] = { "my_exe","-maxclients"};
+    char* test2[] = { "my_exe","-maxclients", NULL};
     arg_struct test2_data[5];
 
-    if ((result = parseCmdLine(2, test1, parseCallback, &test2_data)) == -1) {
-        cout << "Test 1 successful!!" << endl << "Invalid syntax" << endl;
+    if ((result = parseCmdLine(2, test2, parseCallback, &test2_data)) == -1) {
+        cout << "Test 2 successful!!" << endl << "Invalid syntax: Error type 1." << endl;
     }
     else {
-        cout << "Test 1 unsuccessful!" << endl;
+        cout << "Test 2 unsuccessful! Didn't detect error type 1." << endl;
     }
 
     // TEST 3:
 
-    char* test3[] = { "my_exe","-", "hello"};
+    char* test3[] = { "my_exe","-", "hello", NULL};
     arg_struct test3_data[5];
 
-    if ((result = parseCmdLine(3, test1, parseCallback, &test3_data)) == -1) {
-        cout << "Test 1 successful!!" << endl << "Invalid syntax" << endl;
+    if ((result = parseCmdLine(3, test3, parseCallback, &test3_data)) == -1) {
+        cout << "Test 3 successful!!" << endl << "Invalid syntax: Error type 2." << endl;
     }
     else {
-        cout << "Test 1 unsuccessful!" << endl;
+        cout << "Test 3 unsuccessful! Didn't detect error type 2." << endl;
     }
 
     // TEST 4:
 
-    char* test4[] = { "my_exe","-its_a_key", "its_a_value", "its_a_parameter", "another_parameter", "-another_key?", "yes_and_another_value!"};
+    char* test4[] = { "my_exe","-its_a_key", "its_a_value", "its_a_parameter", "another_parameter", "-another_key?", "yes_and_another_value!", NULL};
     arg_struct test4_data[5];
 
-    if ((result = parseCmdLine(7, test1, parseCallback, &test4_data)) != -1) {
-        cout << "Test 1 successful!!" << endl << "Total arguments: " << result << endl;
-        for (i = 0; i < 5; i++) {
-            cout << (test4_data[i]).clave << endl << (test4_data[i]).parametro << endl;
-        }
+    if ((result = parseCmdLine(7, test4, parseCallback, &test4_data)) == -1) {
+        cout << "Test 4 successful!!" << endl << "No acepto una key que no era maxclients." << endl;
     }
     else {
-        cout << "Test 1 unsuccessful!" << endl;
+        cout << "Test 4 unsuccessful! No rechazo una key que no era maxclients." << endl;
     }
-
+    
     return 0;
 }
