@@ -18,9 +18,11 @@ int parseCmdLine(int argc, char *argv[], pCallback p, void *userData) {
                 i++;
                 value = argv[i];
                 if (value == NULL){
-                    return -1;
+                    ok = 0;
                 }
-                ok = p(param+1, value, userData);
+                else {
+                    ok = p(param + 1, value, userData);
+                }
             }
             else{
                 ok = 0;
