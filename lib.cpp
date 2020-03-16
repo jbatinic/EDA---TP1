@@ -23,7 +23,7 @@ int parseCmdLine(int argc, char *argv[], pCallback p, void *userData) {
                 {
                     return -1;
                 }
-                ok = p(param, value, userData);
+                ok = p(param+1, value, userData);
             }
             else
             {
