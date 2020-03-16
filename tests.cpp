@@ -38,7 +38,6 @@ int parseCallback(char* key, char* value, void* userData) {
         argumentos->parametro = my_value;
     }
     else {
-        printf("Parameter Error!\n");
         success = 0;
     }
 
