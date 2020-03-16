@@ -44,18 +44,23 @@ int parseCallback(char* key, char* value, void* userData) {
 
 
 
-int main (int argc, char *argv[]) {
+int main (void) {
 
     arg_struct userData[10];
+    
+    int result;
+    
+    //TEST 1:
 
-    int result = parseCmdLine(argc, argv, parseCallback, &userData);
+    char* test1[] = {"my_exe","-maxclients","2","hello"};
 
-        cout << (userData[0]).clave << endl << (userData[0]).parametro << endl;
-
-    printf("Result = %d\n", result);
-    if (result == -1 )
-    {
-        printf("Parsing Error!\n");
+    if ((result = parseCmdLine(3, test1, parseCallback, &userData)) != -1) {
+        cout << "Test 1 successful!" << endl << "Total arguments: " << result << endl;
+        //  cout << (userData[0]).clave << endl << (userData[0]).parametro << endl;
     }
+    else {
+        cout << "Test 1 unsuccessful!" << endl;
+    }
+    
     return 0;
 }
