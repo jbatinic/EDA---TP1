@@ -1,0 +1,8 @@
+﻿  tests.cpp
+C:\Users\manuc\source\repos\jbatinic\EDA---TP1\tests.cpp(8,5): error C2065: 'arg_struct': undeclared identifier
+C:\Users\manuc\source\repos\jbatinic\EDA---TP1\tests.cpp(8,17): error C2065: 'argumentos': undeclared identifier
+C:\Users\manuc\source\repos\jbatinic\EDA---TP1\tests.cpp(9,5): error C2065: 'argumentos': undeclared identifier
+C:\Users\manuc\source\repos\jbatinic\EDA---TP1\tests.cpp(9,19): error C2065: 'arg_struct': undeclared identifier
+C:\Users\manuc\source\repos\jbatinic\EDA---TP1\tests.cpp(9,30): error C2059: syntax error: ')'
+C:\Users\manuc\source\repos\jbatinic\EDA---TP1\tests.cpp(15,13): error C2065: 'argumentos': undeclared identifier
+C:\Users\manuc\source\repos\jbatinic\EDA---TP1\tests.cpp(24,13): error C2065: 'argumentos': undeclared identifier
