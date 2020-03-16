@@ -22,12 +22,16 @@ int parseCallback(char* key, char* value, void* userData) {
         my_key = "";
     }
     string my_value(value);
-
+    
+    int i = 0;
+    while (argumentos[i].parametro.length() !=0) {
+        i++;
+    }
 
     if (key) {
 
-       if (!strcmp(key,"maxclients")) {  //maxclients es la unica key valida
-           argumentos->clave = my_key;
+       if (!strcmp(key, "maxclients")) {  // maxclients es la unica key valida
+           argumentos[i].clave = my_key;
        }
        else {
            success = 0;
@@ -35,7 +39,7 @@ int parseCallback(char* key, char* value, void* userData) {
     }
     
     if (value) {
-        argumentos->parametro = my_value;
+        argumentos[i].parametro = my_value;
     }
     else {
         success = 0;
@@ -60,12 +64,12 @@ int main (void) {
     result = parseCmdLine(4, test1, parseCallback, test1_data);
     if (result != -1) {
         cout << "Test 1 successful!!" << endl << "Total arguments: " << result << endl;
+        // PRINT TO SEE SAVED DATA: cout << "Data:" << endl << "key: " << test1_data[0].clave<< endl << "parameter: " << test1_data[1].parametro << endl ;
     }
     else {
         cout << "Test 1 unsuccessful!" << endl;
     }
 
-    
 
     // TEST 2:
 
