@@ -14,8 +14,7 @@ int parseCmdLine(int argc, char *argv[], pCallback p, void *userData) {
         if (param[0]=='-'){
             if (param[1] != '\0'){
                 argumentCounter++; // increment counter by 1
-                value = argv[i];
-                i++; // We offset the iteration variable so the option's value doesn't get picked up as a parameter in the next iteration
+                value = argv[++i]; // We offset the iteration variable so the option's value doesn't get picked up as a parameter in the next iteration
                 if (value == NULL){
                     no_error = false;
                 }
