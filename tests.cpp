@@ -1,5 +1,4 @@
 #include "lib.h"
-#include <stdio.h>
 #include <string>
 #include <iostream>
 
@@ -59,8 +58,8 @@ int main (void) {
     char* test1[] = {"my_exe", "-maxclients", "2", "hello", NULL};
     int argc = 4;
 
-    arg_struct test1_data[5]; // Stored data array THIS SHOULD BE DONE DINAMICALY WITH MALLOC
-    arg_struct* data1_pointer = test1_data; // Sotre data pointer
+    arg_struct test1_data[5]; // Stored data array 
+    arg_struct* data1_pointer = test1_data; // Store data pointer
     arg_struct** pointer1 = &data1_pointer; // Pointer to data pointer
 
     result = parseCmdLine(4, test1, parseCallback, pointer1);
@@ -76,9 +75,9 @@ int main (void) {
     /// TEST 2:
 
     char* test2[] = { "my_exe","-maxclients", NULL};
-    arg_struct test2_data[5]; // Stored data array THIS SHOULD BE DONE DINAMICALY WITH MALLOC
+    arg_struct test2_data[5]; // Stored data array 
 
-    arg_struct* data2_pointer = test2_data; // Sotre data pointer
+    arg_struct* data2_pointer = test2_data; // Store data pointer
     arg_struct** pointer2 = &data2_pointer; // Pointer to data pointer
 
 
@@ -94,7 +93,7 @@ int main (void) {
     char* test3[] = { "my_exe","-", "hello", NULL};
     arg_struct test3_data[5];
 
-    arg_struct* data3_pointer = test3_data; // Sotre data pointer
+    arg_struct* data3_pointer = test3_data; // Store data pointer
     arg_struct** pointer3 = &data3_pointer; // Pointer to data pointer
 
     if ((result = parseCmdLine(3, test3, parseCallback, pointer3)) == -1) {
@@ -109,14 +108,14 @@ int main (void) {
     char* test4[] = { "my_exe","-its_a_key", "its_a_value", "its_a_parameter", "another_parameter", "-another_key?", "yes_and_another_value!", NULL};
     arg_struct test4_data[5];
 
-    arg_struct* data4_pointer = test4_data; // Sotre data pointer
+    arg_struct* data4_pointer = test4_data; // Store data pointer
     arg_struct** pointer4 = &data4_pointer; // Pointer to data pointer
 
     if ((result = parseCmdLine(7, test4, parseCallback, pointer4)) == -1) {
-        cout << "Test 4 successful!!" << endl << "No acepto una key que no era maxclients." << endl;
+        cout << "Test 4 successful!!" << endl << "Didn't accept a key that wasn't maxclients (a morphological error)." << endl;
     }
     else {
-        cout << "Test 4 unsuccessful! No rechazo una key que no era maxclients." << endl;
+        cout << "Test 4 unsuccessful! Didn't pick up a morphological error." << endl;
     }
 
     return 0;

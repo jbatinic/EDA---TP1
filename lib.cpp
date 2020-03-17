@@ -4,39 +4,38 @@
 int parseCmdLine(int argc, char *argv[], pCallback p, void *userData) {
 
     int argumentCounter = 0;
-    int ok;
-    char * param;
-    char * value;
+    bool no_error;
+    char * param, *value;
 
     for (int i = 1; i<argc; i++){
         param = argv[i];
 
-        /* If encountered an key, next argument is a value. If value is NULL then returning error */
+        // If a key is encountered the next argument is either a value or NULL. If the program encounters a NULL returns an error. 
         if (param[0]=='-'){
             if (param[1] != '\0'){
-                argumentCounter++; // increment counter by 1 option
-                i++;
+                argumentCounter++; // increment counter by 1
                 value = argv[i];
+                i++; // We offset the iteration variable so the option's value doesn't get picked up as a parameter in the next iteration
                 if (value == NULL){
-                    ok = 0;
+                    no_error = false;
                 }
                 else {
-                    ok = p(param + 1, value, userData);
+                    no_error = p(param + 1, value, userData); //param + 1 because the '-' isn't part of the key
                 }
             }
             else{
-                ok = 0;
+                no_error = false;
             }
         }
         else{
             argumentCounter++; // increment counter by 1 param
-            ok = p(NULL, param, userData);
+            no_error = p(NULL, param, userData);
         }
 
-        /* Check callback validity */
-        if (!ok){
+        /* If we detect any errors during the parse, or the callback function does, then we stop processing info */
+        if (!no_error){
             return -1;
         }
     }
-    return argumentCounter;
+    return argumentCounter; 
 }
