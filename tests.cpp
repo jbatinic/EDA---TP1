@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string>
 #include <iostream>
+
 using namespace std;
 
 
@@ -13,7 +14,7 @@ typedef struct {
 int parseCallback(char* key, char* value, void* userData) {
 
     int success = 1;
-    arg_struct * argumentos = (arg_struct *) userData;
+    arg_struct * argumentos = * (arg_struct**) userData;
     string my_key;
     if (key != NULL) {
         my_key = key;
@@ -21,17 +22,12 @@ int parseCallback(char* key, char* value, void* userData) {
     else {
         my_key = "";
     }
-    string my_value(value);
-    
-    int i = 0;
-    while (argumentos[i].parametro.length() !=0) {
-        i++;
-    }
+    string my_value = value;
 
     if (key) {
 
        if (!strcmp(key, "maxclients")) {  // maxclients es la unica key valida
-           argumentos[i].clave = my_key;
+           argumentos->clave = my_key;
        }
        else {
            success = 0;
@@ -39,11 +35,14 @@ int parseCallback(char* key, char* value, void* userData) {
     }
     
     if (value) {
-        argumentos[i].parametro = my_value;
+        argumentos->parametro = my_value;
     }
     else {
         success = 0;
     }
+
+    // incremento el puntero para que apunte al proximo lugar de storage en mi arreglo
+    (*(arg_struct**)userData)++;
 
     return success;
 
@@ -53,30 +52,37 @@ int parseCallback(char* key, char* value, void* userData) {
 
 int main (void) {
 
-    int result;
-    int i;
+    int result;    
     
-    //TEST 1:
+    // TEST 1:
 
-    char* test1[] = {"my_exe","-maxclients","2", "hello", NULL};
-    arg_struct test1_data[5];
+    char* test1[] = {"my_exe", "-maxclients", "2", "hello", NULL};
+    int argc = 4;
 
-    result = parseCmdLine(4, test1, parseCallback, test1_data);
+    arg_struct test1_data[5]; // Stored data array THIS SHOULD BE DONE DINAMICALY WITH MALLOC
+    arg_struct* data1_pointer = test1_data; // Sotre data pointer
+    arg_struct** pointer1 = &data1_pointer; // Pointer to data pointer
+
+    result = parseCmdLine(4, test1, parseCallback, pointer1);
     if (result != -1) {
         cout << "Test 1 successful!!" << endl << "Total arguments: " << result << endl;
-        // PRINT TO SEE SAVED DATA: cout << "Data:" << endl << "key: " << test1_data[0].clave<< endl << "parameter: " << test1_data[1].parametro << endl ;
+        cout << "Data: {" << endl << "key: " << test1_data[0].clave<< endl << "parameter: " << test1_data[0].parametro << endl ;
+        cout <<"key: " << test1_data[1].clave << endl << "parameter: " << test1_data[1].parametro << endl << "}" << endl;
     }
     else {
         cout << "Test 1 unsuccessful!" << endl;
     }
 
-
-    // TEST 2:
+    /// TEST 2:
 
     char* test2[] = { "my_exe","-maxclients", NULL};
-    arg_struct test2_data[5];
+    arg_struct test2_data[5]; // Stored data array THIS SHOULD BE DONE DINAMICALY WITH MALLOC
 
-    if ((result = parseCmdLine(2, test2, parseCallback, &test2_data)) == -1) {
+    arg_struct* data2_pointer = test2_data; // Sotre data pointer
+    arg_struct** pointer2 = &data2_pointer; // Pointer to data pointer
+
+
+    if ((result = parseCmdLine(2, test2, parseCallback, pointer2)) == -1) {
         cout << "Test 2 successful!!" << endl << "Invalid syntax: Error type 1." << endl;
     }
     else {
@@ -88,7 +94,10 @@ int main (void) {
     char* test3[] = { "my_exe","-", "hello", NULL};
     arg_struct test3_data[5];
 
-    if ((result = parseCmdLine(3, test3, parseCallback, &test3_data)) == -1) {
+    arg_struct* data3_pointer = test3_data; // Sotre data pointer
+    arg_struct** pointer3 = &data3_pointer; // Pointer to data pointer
+
+    if ((result = parseCmdLine(3, test3, parseCallback, pointer3)) == -1) {
         cout << "Test 3 successful!!" << endl << "Invalid syntax: Error type 2." << endl;
     }
     else {
@@ -100,12 +109,15 @@ int main (void) {
     char* test4[] = { "my_exe","-its_a_key", "its_a_value", "its_a_parameter", "another_parameter", "-another_key?", "yes_and_another_value!", NULL};
     arg_struct test4_data[5];
 
-    if ((result = parseCmdLine(7, test4, parseCallback, &test4_data)) == -1) {
+    arg_struct* data4_pointer = test4_data; // Sotre data pointer
+    arg_struct** pointer4 = &data4_pointer; // Pointer to data pointer
+
+    if ((result = parseCmdLine(7, test4, parseCallback, pointer4)) == -1) {
         cout << "Test 4 successful!!" << endl << "No acepto una key que no era maxclients." << endl;
     }
     else {
         cout << "Test 4 unsuccessful! No rechazo una key que no era maxclients." << endl;
     }
-    
+
     return 0;
 }
